@@ -1,0 +1,42 @@
+class Box:
+    def __init__(self, fileName):
+        self.fileName = fileName
+    
+    def readData(self):
+        data = [x.strip() for x in open(self.fileName, 'r').readlines()]
+        return data
+    #prepare data to a format searchForContainAndBoxes
+    # boxes = {
+    # "light red": "1 bright white boxes, 2 muted yellow boxes.",
+    # "dark orange": "3 bright white boxes, 4 muted yellow boxes.",
+    # "bright white": "1 shiny gold box.",
+    # "muted yellow":  "2 shiny gold boxes, 9 faded blue boxes.",
+    # }
+    def searchForContainAndBoxes(self,data):
+        boxes = {}
+        for line in data:
+            box, contains = line.split('contain')
+            box = box.replace(' boxes','')
+            boxes[box] = contains
+        self.searchForShinyGold(box, boxes)
+        total = self.searchForShinyGold('shiny gold', boxes)
+        return len(total) 
+
+    #search for Shiny Gold box , input boxes(eg. shin gold , its contain)
+    #recursively box within box and add it to main list
+    def searchForShinyGold(self,box, boxes):
+            contains = []
+            for b in boxes:
+                if box in boxes[b]:
+                    # Add box to to list
+                    contains.append(b)
+                    # Add all children to box to the list
+                    contains.extend(self.searchForShinyGold(b, boxes))
+            return set(contains)
+    def main():
+        box = Box("input3.txt")
+        data = box.readData()
+        print(box.searchForContainAndBoxes(data))
+#main
+if __name__ == "__main__":
+        Box.main()

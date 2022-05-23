@@ -1,0 +1,7 @@
+shiny gold boxes contain 2 dark red boxes.
+dark red boxes contain 2 dark orange boxes.
+dark orange boxes contain 2 dark yellow boxes.
+dark yellow boxes contain 2 dark green boxes.
+dark green boxes contain 2 dark blue boxes.
+dark blue boxes contain 2 dark violet boxes.
+dark violet boxes contain no other boxes

@@ -1,0 +1,49 @@
+class Box:
+    def __init__(self, fileName):
+        self.fileName = fileName
+    #read the input file  
+    def readData(self):
+        data = [x.strip() for x in open(self.fileName, 'r').readlines()]
+        return data
+    #prepare the data 
+    # boxes = {
+    #         "light red": { "bright white": 1, "muted yellow": 2 },
+    #         "dark orange": { "bright white": 3, "muted yellow": 4 },
+    # }
+    def prepareDataFormat(self,data):
+        boxes = {}
+        for item in data:
+            # replace all boxes, box to space and to remove unwanted data
+            item = item.replace('boxes', '').replace('box', '').replace('.','')
+            box, contains = item.split('contain')
+            box = box.strip()
+            # if box doesn't contain no other box
+            if 'no other' in contains: 
+                boxes[box] = {}
+                continue
+
+            containsOfContains = contains.split(',')
+            contain_dict = {}
+            for cItem in [cItem.strip() for cItem in containsOfContains]:
+                numberOfBoxes = cItem[:2]
+                colorType = cItem[2:]
+                contain_dict[colorType] = int(numberOfBoxes)
+            boxes[box] = contain_dict
+        return boxes
+
+    def multipleBoxesInSideBox_count(self, box, boxes):
+        count = 1  # Count the box itself
+        contained_boxes = boxes[box]
+        for c in contained_boxes:
+            multiplier = contained_boxes[c]
+            count += multiplier * self.multipleBoxesInSideBox_count(c, boxes)
+        return count
+    def main():
+            box = Box("input3.txt")
+            data = box.readData()
+            boxes = box.prepareDataFormat(data)
+            #one to not count the shiny gold box itself
+            print(box.multipleBoxesInSideBox_count('shiny gold', boxes) - 1)
+#main
+if __name__ == "__main__":
+        Box.main()
